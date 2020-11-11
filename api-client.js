@@ -2,57 +2,58 @@ const apiUrl = `https://jsonbox.io/box_b0b4e20ceaeca4d91882/`;
 
 //GET
 const getToDoList = async () => {
-    const results = await fetch(apiUrl);
-    const json = await results.json();
-    const getDescription = json.forEach(object => {
-        let li = document.createElement("Li");
-        let div = document.createElement('div')
-        let taskButton = document.createElement('button')
-        li.innerHTML = object.description
-        ul.appendChild(div);
-        div.appendChild(li);
-        li.appendChild(taskButton);
-    })
+    const result = await fetch(apiUrl);
+    const json = await result.json();
+    // console.log(json);
+    return json;
 }
 getToDoList()
 
-
-// forEach(element => {
-//     const li = document.createElement("li");
-//     const textnode = document.createTextNode(element);
-//     li.appendChild(textnode);
-//     results.appendChild(li);
-// });
-// }
-
-// json.foreach((object) => {
-//     li.addElement(object => object.description)
-// })
-
-// const description = async () => {
-//     await get().data.description
-//     console.log(description)
-// }
-// json data met forEach!!
-
 //POST
-const postToDoList = async () => {
-    const data = { description: toDoInputField.value, done: false };
-    fetch(apiUrl, {
+const postToDoList = async data => {
+    const result = await fetch(apiUrl, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
-        }
-    }).then(res => {
-        return res.json()
-    })
-        .then(data => console.log(data))
-        .catch(err => console.log('Error!'))
+        },
+    });
+    const json = await result.json()
+    console.log(json);
 }
 
+// // PUT NIET NODIG!!!
+// const updateTodoData = async (id, data, state) => {
+//     const updateApi = `${apiUrl}${id}`
+//     const result = await fetch(updateApi, {
+//         method: "PUT",
+//         body: JSON.stringify({ description: data, done: state }),
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//     });
+//     const json = await result.json()
+//     console.log(json)
+//     return json
 
+// }
 
+// DELETE
+const deleteTodoData = async id => {
+    const deleteApi = `${apiUrl}${id}`
+    // console.log(deleteApi);
+    const result = await fetch(deleteApi, {
+        method: "DELETE",
+    });
+    const json = await result.json()
+    // console.log(json)
+    return json
+}
 
-
-
+// DELETE alles
+const deleteAllTasks = async () => {
+    const result = await fetch(apiUrl);
+    const json = await result.json();
+    json.forEach(item => deleteTodoData(item._id));
+    // console.log(json);
+}  
